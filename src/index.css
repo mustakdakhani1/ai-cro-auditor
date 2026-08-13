@@ -1,0 +1,137 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Inter, Arial, sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+.navbar {
+  height: 72px;
+  padding: 0 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.login-btn {
+  padding: 10px 20px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.hero {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 110px 20px;
+  text-align: center;
+}
+
+.badge {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 25px;
+}
+
+h1 {
+  font-size: 64px;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  margin-bottom: 25px;
+}
+
+h1 span {
+  color: #2563eb;
+}
+
+.subtitle {
+  max-width: 650px;
+  margin: 0 auto 35px;
+  font-size: 19px;
+  line-height: 1.6;
+  color: #64748b;
+}
+
+.url-box {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 6px;
+  display: flex;
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.url-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 15px;
+  font-size: 16px;
+}
+
+.url-box button {
+  border: none;
+  border-radius: 8px;
+  padding: 0 22px;
+  background: #2563eb;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.note {
+  margin-top: 15px;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+@media (max-width: 700px) {
+  h1 {
+    font-size: 42px;
+  }
+
+  .url-box {
+    flex-direction: column;
+    gap: 8px;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .url-box input {
+    width: 100%;
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+  }
+
+  .url-box button {
+    min-height: 50px;
+  }
+}
