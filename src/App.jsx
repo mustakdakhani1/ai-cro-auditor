@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./App.css";
 
 function App() {
   const [websiteUrl, setWebsiteUrl] = useState("");
@@ -83,31 +84,49 @@ function App() {
 
           {/* CRO SCORE */}
 
-          <div className="score-card">
-            <div>
-              <p className="score-label">Overall CRO Score</p>
+          {/* CRO SCORE */}
 
-              <div className="score">
-                {analysis?.score ?? 0}
-                <span>/100</span>
-              </div>
-            </div>
+<div className="score-card">
 
-            <div className="score-message">
-              <strong>
-                {analysis?.score >= 80
-                  ? "Great website!"
-                  : analysis?.score >= 60
-                  ? "Good, but there is room to improve."
-                  : "Several improvements are needed."}
-              </strong>
+  <div className="score-container">
 
-              <p>
-                Our audit found {findings.length} areas that can help improve
-                your website's conversion experience.
-              </p>
-            </div>
-          </div>
+    <div
+      className="score-circle"
+      style={{
+        "--score": `${analysis?.score ?? 0}%`,
+      }}
+    >
+      <div className="score-circle-inner">
+        <div className="score">
+          {analysis?.score ?? 0}
+        </div>
+
+        <span>/100</span>
+      </div>
+    </div>
+
+    <p className="score-label">Overall CRO Score</p>
+
+  </div>
+
+  <div className="score-message">
+
+    <strong>
+      {analysis?.score >= 80
+        ? "Great website!"
+        : analysis?.score >= 60
+        ? "Good, but there is room to improve."
+        : "Several improvements are needed."}
+    </strong>
+
+    <p>
+      Our audit found {findings.length} areas that can help improve
+      your website's conversion experience.
+    </p>
+
+  </div>
+
+</div>
 
           {/* WEBSITE DATA */}
 
@@ -163,21 +182,40 @@ function App() {
 
                     {/* CRO BREAKDOWN */}
 
-          <section className="audit-section">
-            <h2>CRO Breakdown</h2>
+          {/* CRO BREAKDOWN */}
 
-            <div className="analysis-grid">
-              {Object.entries(analysis?.categoryScores || {}).map(
-                ([category, score]) => (
-                  <div className="analysis-item" key={category}>
-                    <span>{category}</span>
-                    <strong>{score === null ? "N/A" : `${score}/100`}</strong>
-                  </div>
-                )
-              )}
+<section className="audit-section">
+  <h2>CRO Breakdown</h2>
+
+  <div className="category-grid">
+    {Object.entries(analysis?.categoryScores || {}).map(
+      ([category, score]) => (
+        <div className="category-card" key={category}>
+
+          <div className="category-header">
+            <span>{category}</span>
+
+            <strong>
+              {score === null ? "N/A" : `${score}/100`}
+            </strong>
+          </div>
+
+          {score !== null && (
+            <div className="progress-bar">
+              <div
+                className="progress-fill"
+                style={{
+                  width: `${score}%`,
+                }}
+              />
             </div>
-          </section>
+          )}
 
+        </div>
+      )
+    )}
+  </div>
+</section>
           {/* AUDIT SUMMARY */}
 
           <section className="audit-section">

@@ -2,8 +2,31 @@ const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
 const cheerio = require("cheerio");
+const { chromium } = require("playwright");
+const path = require("path");
+const fs = require("fs");
 
 const app = express();
+
+let browser;
+
+async function getBrowser() {
+  if (!browser) {
+    browser = await chromium.launch({
+      headless: true,
+    });
+  }
+
+  return browser;
+}
+
+const screenshotDir = path.join(__dirname, "screenshots");
+
+if (!fs.existsSync(screenshotDir)) {
+  fs.mkdirSync(screenshotDir);
+}
+
+app.use("/screenshots", express.static(screenshotDir));
 
 app.use(cors());
 app.use(express.json());
@@ -25,16 +48,43 @@ app.post("/api/analyze", async (req, res) => {
   }
 
   try {
-    console.log("Fetching website:", websiteUrl);
+    console.log("Opening website with Playwright:", websiteUrl);
 
-    const response = await axios.get(websiteUrl, {
-      timeout: 10000,
-      headers: {
-        "User-Agent": "Mozilla/5.0",
-      },
-    });
+const browserInstance = await getBrowser();
 
-    const $ = cheerio.load(response.data);
+const page = await browserInstance.newPage({
+  viewport: {
+    width: 1440,
+    height: 900,
+  },
+  userAgent:
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/151.0.0.0 Safari/537.36",
+});
+
+await page.goto(websiteUrl, {
+  waitUntil: "domcontentloaded",
+  timeout: 60000,
+});
+
+// Give JavaScript-rendered content a moment to appear
+await page.waitForTimeout(1500);
+
+console.log("Website rendered successfully.");
+
+const renderedHtml = await page.content();
+
+const $ = cheerio.load(renderedHtml);
+
+const screenshotName = `audit-${Date.now()}.png`;
+
+await page.screenshot({
+  path: path.join(screenshotDir, screenshotName),
+  fullPage: true,
+});
+
+console.log("Screenshot saved:", screenshotName);
+
+await page.close();
 
     // =====================================================
     // BASIC DATA
@@ -78,8 +128,6 @@ if (saasSignals.test(pageText)) {
   websiteType = "SaaS / Software";
 } else if (ecommerceSignals.test(pageText)) {
   websiteType = "E-commerce";
-} else if (localBusinessSignals.test(pageText)) {
-  websiteType = "SaaS / Software";
 } else if (localBusinessSignals.test(pageText)) {
   websiteType = "Local Business";
 } else if (contentSignals.test(pageText)) {
@@ -806,6 +854,7 @@ croCategoriesForScore.forEach((category) => {
   title,
   h1,
   metaDescription,
+  screenshot: `/screenshots/${screenshotName}`,
   links,
   buttons,
   forms,
